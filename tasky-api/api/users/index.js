@@ -27,7 +27,6 @@ router.post(
           .json({ code: 400, msg: "Password does not meet the requirements." });
       }
 
-      // Create a new user instance and save it to the database
       const newUser = new User({ username, password });
       await newUser.save();
 
