@@ -18,17 +18,6 @@ const errHandler = (err, req, res, next) => {
     .send(`Hey!! You caught the error 👍👍. Here's the details: ${err.stack} `);
 };
 
-const userErrorHandler = (err, req, res, next) => {
-  if (process.env.NODE_ENV === "production") {
-    return res.status(500).json({ error: "Something went wrong!" });
-  }
-  res
-    .status(500)
-    .json({
-      error: `Hey!! You caught the error 👍👍. Here's the details: ${err.stack}`,
-    });
-};
-
 const app = express();
 
 // Enable CORS for all requests

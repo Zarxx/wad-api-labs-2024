@@ -1,7 +1,6 @@
 import express from "express";
 import User from "./userModel";
 import asyncHandler from "express-async-handler";
-import userErrorHandler from "./userErrorHandler";
 
 const router = express.Router(); // eslint-disable-line
 
@@ -19,14 +18,24 @@ router.post(
   "/",
   asyncHandler(async (req, res) => {
     if (req.query.action === "register") {
-      // If action is 'register', then save to DB
-      await User(req.body).save();
+      const { username, password } = req.body;
+      const passwordRegex =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+      if (!passwordRegex.test(password)) {
+        return res
+          .status(400)
+          .json({ code: 400, msg: "Password does not meet the requirements." });
+      }
+
+      // Create a new user instance and save it to the database
+      const newUser = new User({ username, password });
+      await newUser.save();
+
       res.status(201).json({
         code: 201,
         msg: "Successfully created new user.",
       });
     } else {
-      // Must be an authentication attempt, query the DB and check if there's a match
       const user = await User.findOne(req.body);
       if (!user) {
         return res
@@ -42,7 +51,6 @@ router.post(
     }
   })
 );
-
 // Update a user
 router.put(
   "/:id",
@@ -61,7 +69,5 @@ router.put(
     }
   })
 );
-
-router.use(userErrorHandler);
 
 export default router;
