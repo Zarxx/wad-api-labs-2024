@@ -1,7 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
-
 
 const MovieSchema = new Schema({
   adult: { type: Boolean },
@@ -18,23 +17,25 @@ const MovieSchema = new Schema({
   vote_count: { type: Number },
   video: { type: Boolean },
   vote_average: { type: Number },
-  production_countries: [{
-    iso_3166_1: { type: String },
-    name: { type: String }
-  }],
+  production_countries: [
+    {
+      iso_3166_1: { type: String },
+      name: { type: String },
+    },
+  ],
   runtime: { type: Number },
-  spoken_languages: [{
-    iso_639_1: { type: String },
-    name: { type: String }
-  }],
+  spoken_languages: [
+    {
+      iso_639_1: { type: String },
+      name: { type: String },
+    },
+  ],
   status: { type: String },
-  tagline: { type: String }
+  tagline: { type: String },
 });
 
 MovieSchema.statics.findByMovieDBId = function (id) {
   return this.findOne({ id: id });
 };
 
-export default mongoose.model('Movies', MovieSchema);
-
-
+export default mongoose.model("Movies", MovieSchema);
